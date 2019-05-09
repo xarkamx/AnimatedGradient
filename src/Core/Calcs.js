@@ -1,5 +1,11 @@
 export class Calcs {
   getCenter = dom => {
+    if (typeof dom == "undefined") {
+      return {
+        y: 0,
+        x: 0
+      };
+    }
     const pos = dom.getBoundingClientRect();
     return {
       y: pos.y - pos.height / 2,

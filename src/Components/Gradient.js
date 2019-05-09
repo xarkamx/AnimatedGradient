@@ -22,10 +22,14 @@ export class Gradient extends Component {
 
   radToDeg = rad => rad * (180 / Math.PI);
   componentDidMount() {
-    this.drawGradient({ x: 0, y: 0 });
+    this.mouseData = { clientX: 0, clientY: 0 };
+    this.drawGradient(this.mouseData);
     document.addEventListener("mousemove", e => {
-      this.drawGradient(e);
+      this.mouseData = e;
     });
+    setInterval(() => {
+      this.drawGradient(this.mouseData);
+    }, 16);
   }
   getCenter() {
     const gradientDiv = this.refs.gradient;
@@ -70,10 +74,10 @@ export class Gradient extends Component {
         id="grad"
         style={{
           color: "white",
-          textShadow: "1px 1px 1px #333",
           height: "100%",
           width: "100%",
-          float: "right"
+          float: "right",
+          transition: "background .3s"
         }}
       >
         {this.props.children}
