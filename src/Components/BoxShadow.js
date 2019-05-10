@@ -47,11 +47,13 @@ export class BoxShadow extends Component {
     return layersStrings.join();
   }
   render = () => {
+    const style = this.props.style;
     return (
       <div
         ref="shadow"
         style={{
-          overflow: "hidden"
+          overflow: "hidden",
+          ...style
         }}
       >
         {this.props.children}
