@@ -3,13 +3,17 @@ import { Calcs } from "./../Core/Calcs";
 
 export class Paralax extends Component {
   componentDidMount() {
-    document.addEventListener("mousemove", e => {
-      this.paralaxEffect(e);
-    });
+    document.addEventListener("mousemove", this.paralaxEffect.bind(this));
+  }
+  componentWillUnmount() {
+    document.removeEventListener("mousemove", this.paralaxEffect);
   }
   paralaxEffect(position) {
     const calc = new Calcs();
     const paralax = this.refs.paralax;
+    if (paralax == undefined) {
+      return false;
+    }
     const center = calc.getCenter(paralax);
     const cursor = {
       x: position.clientX,
