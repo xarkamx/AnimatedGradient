@@ -1,12 +1,29 @@
 import React, { Component } from "react";
 import { Calcs } from "./../Core/Calcs";
+import './animated.css';
 
 export class Paralax extends Component {
   componentDidMount() {
-    document.addEventListener("mousemove", this.paralaxEffect.bind(this));
+    let position ={}
+    let interval = {};
+    const setPosition=(e)=>{
+      position={
+        clientX:e.clientX,
+        clientY:e.clientY
+      }
+    }
+    interval = setInterval(()=>{
+      this.paralaxEffect(position);
+    },40);
+    document.addEventListener("mousemove",setPosition );
+
+    this.killItWithFire=()=>{
+      document.removeEventListener("mousemove", setPosition);
+      clearInterval(interval);
+    }
   }
   componentWillUnmount() {
-    document.removeEventListener("mousemove", this.paralaxEffect);
+    this.killItWithFire();
   }
   paralaxEffect(position) {
     const calc = new Calcs();
@@ -46,12 +63,13 @@ export class Paralax extends Component {
       let percentX = domSize.width / windowSize.width;
       let percentY = domSize.height / windowSize.height;
       let deep = dom.dataset.zindex;
-      let valueX = `${(position.x * (deep * percentX)) / hipotenusa}px`;
-      let valueY = `${((position.y * (deep * percentY)) / hipotenusa) *
-        percentY}px`;
+      let x = ((position.x * (deep * percentX)) / hipotenusa)-(domSize.width/2);
+      let y = ((position.y * (deep * percentY)) / hipotenusa) *
+      percentY;
+      
+      let translate = `translate3D(${x}px,${y}px,100px)`;
 
-      dom.style.top = valueY;
-      dom.style.left = valueX;
+      dom.style.transform = translate;
     }
   }
 
